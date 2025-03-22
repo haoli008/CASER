@@ -13,7 +13,6 @@ CASER(known_gene_path,unknown_gene_path,res_path)
 ## usage
 ```python
 from CASER import CASER
-# 
 known_gene_path = './data/geneSet.txt' # original data path
 unknown_gene_path = './data/unknonwn_gene.txt' # Data path that need to be predicted
 res_path = './result/final_result.txt' # Result file path
