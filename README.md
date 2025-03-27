@@ -15,7 +15,7 @@ Prioritizing a reliable list of cancer-associated Epigenetic Regulators (cERs) i
     ACTL6B	    0.3972	                0.0035	                        0	                        ...     0.078
     
 ### Output file description
-    Gene	Score	    p-value	            q-value                 is_cancer_related(<=threshold)
+    Gene	Score	        p-value	                q-value                 is_cancer_related(<=threshold)
     ZNF217	0.76280177	0.0001692126179831	0.009896958830103773    1
     SATB2	0.7569754	0.0002654619970193	0.009896958830103773    1
     ...
