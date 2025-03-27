@@ -22,14 +22,6 @@ Prioritizing a reliable list of cancer-associated Epigenetic Regulators (cERs) i
     CSNK2A3	0.2800701	0.984669957774466	0.9886165307515179      0
     HSPA1A	0.2791872	0.9897121833084948	0.9916916076751118      0
     TSSK6	0.25791362	0.9951704545454544	0.9951704545454544      0
-```python
-from CASER import predict,predict_subtype
-import ML_models as ml
-import DL_models as dl
-known_gene_path = './data/geneSet.txt' # original data path
-unknown_gene_path = './data/unknonwn_gene.txt' # Data path that need to be predicted
-CASER(known_gene_path,unknown_gene_path,res_path)
-```
 ## 
 
 ### Example
