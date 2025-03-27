@@ -1,16 +1,39 @@
 # CASER
 Prioritizing a reliable list of cancer-associated Epigenetic Regulators (cERs) is important for cancer diagnosis and drug target discovery. Though many ERs have been suggested to have cancer driver roles, we anticipate more cERs to be discovered through computational analyses. Many cERs are not associated with dysregulated cancer phenotype. Here, we proposed a semi-supervised machine-learning method based on the tri-training model, and termed as Cancer-Associated Epigenetic Regulator identification (CASER). CASER integrated relatively comprehensive omics data including mutation, genomic, epigenetic and transcriptomic features and prioritize cERs as well as the four categories of functional roles. CASER achieved the better overall performance for the prioritization of unbiased cERs when evaluating on an independent gene set compared with various other machine-learning and deep-learning models. The identified novel cERs demonstrate comparable cancer driving potential and cell survival essentiality compared with known cancer driver genes. We also successfully validated two potential cERs in two cell lines, suggesting the usefulness of the CASER approach. In addition, cERs are enriched in modules in the gene-drug network. Therefore, our study suggests the feasibility of identifying cERs based on the integration of a large number of omics features by a semi-supervised model. The identified cERs could be the valuable resources for further functional studies, providing a better understanding of the role of cERs in cancer biology.
-## usage
+## Usage
+### Input file description
+#### known_gene_path('./data/geneSet.txt')
+    Gene       VEST_score_missense      VEST_score_frameshift_indels      ...      label（is_caner_related)
+    A1CF       0.4211                   0.0059                            ...       1
+    AAAS       0.3861                   0.0347                            ...       0
+    AAK1       0.2987                   0.0136                            ...       0
+#### unknown_gene_path('./data/unknonwn_gene.txt')
+    Gene	    VEST_score_missense	    VEST_score_frameshift_indels	VEST_score_inframe_indels	...    SEA_super_enhancer_percentage
+    A1CF	    0.4211	                0.0059	                        0	                                0.2411
+    ABRAXAS2	0.3365	                0.0126	                        0	                        ...     0.2057
+    ACTB	    0.4931	                0.0187	                        0.0157	                    ...     0.8298
+    ACTL6B	    0.3972	                0.0035	                        0	                        ...     0.078
+    
+### Output file description
+    Gene	Score	    p-value	            q-value                 is_cancer_related(<=threshold)
+    ZNF217	0.76280177	0.0001692126179831	0.009896958830103773    1
+    SATB2	0.7569754	0.0002654619970193	0.009896958830103773    1
+    ...
+    CSNK2A3	0.2800701	0.984669957774466	0.9886165307515179      0
+    HSPA1A	0.2791872	0.9897121833084948	0.9916916076751118      0
+    TSSK6	0.25791362	0.9951704545454544	0.9951704545454544      0
 ```python
 from CASER import predict,predict_subtype
 import ML_models as ml
 import DL_models as dl
+known_gene_path = './data/geneSet.txt' # original data path
+unknown_gene_path = './data/unknonwn_gene.txt' # Data path that need to be predicted
 CASER(known_gene_path,unknown_gene_path,res_path)
 ```
 ## 
 
 ### Example
-## usage
+## Usage
 
 ### Single prediction
 ```python
@@ -79,4 +102,5 @@ CASER(known_gene_path,unknown_gene_path,res_path)
     predict(known_gene_path,unknown_gene_path,res_path,model=model)
 ```
 ## 
- 
+ ## Citation
+     A semi-supervised model with multi-omics data integration prioritizes cancer-associated epigenetic regulator genes, under review
