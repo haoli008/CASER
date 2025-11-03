@@ -200,4 +200,3 @@ For questions, suggestions, or technical support, please contact the development
 ------
 
 *Note: This tool represents a significant advancement in computational cancer genomics and provides valuable resources for understanding the role of epigenetic regulators in cancer biology.*
->>>>>>> feautre/1103
