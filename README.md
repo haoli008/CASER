@@ -192,7 +192,7 @@ CASER has been rigorously validated through multiple approaches:
 
 If you use CASER in your research, please cite:
 
-**A semi-supervised model with multi-omics data integration prioritizes cancer-associated epigenetic regulator genes**,*PLOS Computational Biology*, under review
+**A semi-supervised model with multi-omics data integration prioritizes cancer-associated epigenetic regulator genes**.*PLOS Computational Biology*, under review
 
 ## Contact and Support
 
