@@ -169,9 +169,11 @@ for key, value in metrics.items():
 CASER has been rigorously validated through multiple approaches:
 
 - **Computational benchmarking**: Superior performance on independent gene sets compared to alternative methods
-- **Biological validation**: Experimental confirmation of two predicted cERs in cell line models
 - **Functional analysis**: Novel cERs demonstrate comparable cancer-driving potential to known driver genes
 - **Network analysis**: Enrichment of cERs in gene-drug network modules, suggesting therapeutic relevance
+
+**The example code is in the example.py file; it's recommended to start from this part.**
+
 
 ## Applications
 
@@ -183,19 +185,20 @@ CASER has been rigorously validated through multiple approaches:
 ## System Requirements
 
 - Python 3.7+
-- Machine learning libraries (scikit-learn, TensorFlow/PyTorch)
-- Data processing libraries (pandas, numpy)
-- Statistical analysis packages
+- Machine learning libraries (scikit-learn 1.2.1, PyTorch 2.7)
+- Data processing libraries (pandas 2.2.2, numpy 1.26.4)
 
 ## Citation
 
 If you use CASER in your research, please cite:
 
-**A semi-supervised model with multi-omics data integration prioritizes cancer-associated epigenetic regulator genes**, under review
+**A semi-supervised model with multi-omics data integration prioritizes cancer-associated epigenetic regulator genes**,*PLOS Computational Biology*, under review
 
 ## Contact and Support
 
 For questions, suggestions, or technical support, please contact the development team.
+
+lvjie@ucas.ac.cn,lh0083@126.com
 
 ------
 
