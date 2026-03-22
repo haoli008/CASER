@@ -26,6 +26,171 @@ CASER integrates comprehensive omics data including:
 
 The tri-training approach enables robust predictions even when labeled training data is limited, making it particularly valuable for rare or understudied cancer types.
 
+## Installation
+
+### 1) Create and activate a virtual environment
+
+Windows (PowerShell):
+
+```bash
+python -m venv .venv
+.\.venv\Scripts\Activate.ps1
+```
+
+macOS/Linux:
+
+```bash
+python -m venv .venv
+source .venv/bin/activate
+```
+
+### 2) Install dependencies
+
+```bash
+python -m pip install --upgrade pip
+python -m pip install -r requirements.txt
+```
+
+Optional (only if you use deep semi-supervised models in `utils/DL_models.py`):
+
+```bash
+python -m pip install torch
+```
+
+## Step-by-Step Running Guide
+
+### Quick Start (run built-in example)
+
+```bash
+python example.py
+```
+
+This will:
+- Train a tri-training model on `data/geneSet.txt`
+- Predict on `data/unknown_gene.txt`
+- Save results to `result/final_result.txt`
+
+### Command-Line Interface (recommended)
+
+```bash
+python run_caser.py --known ./data/geneSet.txt --unknown ./data/unknown_gene.txt --out ./result/final_result.txt
+```
+
+Switch model:
+
+```bash
+python run_caser.py --known ./data/geneSet.txt --unknown ./data/unknown_gene.txt --out ./result/final_result.txt --model co_training
+```
+
+Subtype prediction (comma-separated lists must match in length):
+
+```bash
+python run_caser.py --mode subtype --known ./data/cERs_gene.txt,./data/readers_gene.txt,./data/remodelers_gene.txt,./data/erasers_gene.txt,./data/writers_gene.txt --unknown ./data/unknown_cERs_gene.txt,./data/unknown_readers_gene.txt,./data/unknown_remodelers_gene.txt,./data/unknown_erasers_gene.txt,./data/unknown_writers_gene.txt --out ./result/cERs_final_result.txt,./result/readers_final_result.txt,./result/remodelers_final_result.txt,./result/erasers_final_result.txt,./result/writers_final_result.txt
+```
+
+### A) Train on new data and predict (recommended workflow)
+
+CASER is semi-supervised: it trains on **labeled** data and uses **unlabeled** data for prediction in the same run.
+
+Step 1: Prepare data files
+- **Known (labeled) file**: tab-separated, includes a `label` column (1 = cancer-related, 0 = not cancer-related)
+- **Unknown (unlabeled) file**: same feature columns, **no** `label` column
+
+Step 2: Run the prediction script (this trains + predicts in one run)
+
+```python
+from CASER import predict
+
+known_gene_path = "./data/your_known_gene.txt"
+unknown_gene_path = "./data/your_unknown_gene.txt"
+res_path = "./result/your_result.txt"
+
+predict(known_gene_path, unknown_gene_path, res_path)
+print("Done. Results saved to:", res_path)
+```
+
+Run it:
+
+```bash
+python -c "from CASER import predict; predict('./data/your_known_gene.txt','./data/your_unknown_gene.txt','./result/your_result.txt')"
+```
+
+### B) Train a model on new data and save it (advanced)
+
+If you want to **train once** and **reuse** the trained model later, you can call the model API directly and save it with `pickle`.
+
+```python
+import pandas as pd
+import pickle
+import utils.ML_models as ml
+
+known_gene_path = "./data/your_known_gene.txt"
+unlabeled_pool_path = "./data/your_unlabeled_pool.txt"
+model_path = "./result/caser_model.pkl"
+
+df = pd.read_csv(known_gene_path, sep="\t", index_col=0)
+X = df.drop(columns=["label"]).values
+y = df["label"].values
+
+unlabeled_X = pd.read_csv(unlabeled_pool_path, sep="\t", index_col=0).values
+
+pred_y, prob_y, trained_model = ml.tri_training(X, y, unlabeled_X)
+
+with open(model_path, "wb") as f:
+    pickle.dump(trained_model, f)
+
+print("Model saved to:", model_path)
+```
+
+> Note: The current `predict()` function always trains internally. If you want **pure inference** with a saved model, load the model from `model_path` and call its `predict`/`predict_proba` methods directly, then follow the same result formatting as in `CASER.py`.  
+
+### C) Subtype-specific prediction (writers/erasers/readers/remodelers)
+
+```python
+from CASER import predict_subtype
+
+known_gene_paths = [
+    "./data/cERs_gene.txt",
+    "./data/readers_gene.txt",
+    "./data/remodelers_gene.txt",
+    "./data/erasers_gene.txt",
+    "./data/writers_gene.txt",
+]
+
+unknown_gene_paths = [
+    "./data/unknown_cERs_gene.txt",
+    "./data/unknown_readers_gene.txt",
+    "./data/unknown_remodelers_gene.txt",
+    "./data/unknown_erasers_gene.txt",
+    "./data/unknown_writers_gene.txt",
+]
+
+result_paths = [
+    "./result/cERs_final_result.txt",
+    "./result/readers_final_result.txt",
+    "./result/remodelers_final_result.txt",
+    "./result/erasers_final_result.txt",
+    "./result/writers_final_result.txt",
+]
+
+predict_subtype(known_gene_paths, unknown_gene_paths, result_paths)
+```
+
+### D) Switch to other models
+
+```python
+from CASER import predict
+import utils.ML_models as ml
+
+known_gene_path = "./data/your_known_gene.txt"
+unknown_gene_path = "./data/your_unknown_gene.txt"
+res_path = "./result/your_result.txt"
+
+# Example: use co-training instead of tri-training
+model = ml.co_training
+predict(known_gene_path, unknown_gene_path, res_path, model=model)
+```
+
 ## Input File Specifications
 
 ### Known Gene Set (`known_gene_path`)
@@ -80,9 +245,9 @@ TSSK6     0.25791362     0.9951704545454544   0.9951704545454544    0
 from CASER import predict, predict_subtype
 from utils import DL_models as dl, ML_models as ml
 
-known_gene_path = './data/geneSet.txt'      # Training data with labels
-unknown_gene_path = './data/unknown_gene.txt'  # Data to be predicted
-res_path = './result/final_result.txt'      # Output file path
+known_gene_path = '../../data/geneSet.txt'  # Training data with labels
+unknown_gene_path = '../../data/unknown_gene.txt'  # Data to be predicted
+res_path = '../../result/final_result.txt'  # Output file path
 
 predict(known_gene_path, unknown_gene_path, res_path)
 ```
