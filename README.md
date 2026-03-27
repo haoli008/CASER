@@ -198,7 +198,7 @@ If you use CASER in your research, please cite:
 
 For questions, suggestions, or technical support, please contact the development team.
 
-lvjie@ucas.ac.cn,lh0083@126.com
+lvjie@wiucas.ac.cn,lh0083@126.com
 
 ------
 
